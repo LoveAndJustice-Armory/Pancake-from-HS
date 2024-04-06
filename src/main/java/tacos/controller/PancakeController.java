@@ -2,6 +2,7 @@ package tacos.controller;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -10,31 +11,32 @@ import tacos.domain.Ingredient;
 import tacos.domain.Ingredient.Type;
 import tacos.domain.Pancake;
 import tacos.domain.PancakeOrder;
+import tacos.repository.IngredientRepository;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 @Controller
 @RequestMapping("/design")
 @SessionAttributes("pancakeOrder")    // 使得对象可以在会话中保存，跨多个请求
 public class PancakeController {
+    private IngredientRepository ingredientRepository;
+
+    @Autowired
+    public PancakeController(IngredientRepository ingredientRepository) {
+        this.ingredientRepository = ingredientRepository;
+    }
 
     @ModelAttribute // 将对象添加到模型，表明这个方法会在控制器方法之前调用
     public void addIngredientsToModel(Model model) { // model负责在控制器和视图之间传递数据，其中的数据会被复制到Servlet Request属性中
-        List<Ingredient> ingredients = Arrays.asList(
-                new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
-                new Ingredient("COTO", "Corn Tortilla", Type.WRAP),
-                new Ingredient("GRBF", "Ground Beef", Type.PROTEIN),
-                new Ingredient("CARN", "Carnitas", Type.PROTEIN),
-                new Ingredient("TMTO", "Diced Tomatoes", Type.VEGGIES),
-                new Ingredient("LETC", "Lettuce", Type.VEGGIES),
-                new Ingredient("CHED", "Cheddar", Type.CHEESE),
-                new Ingredient("JACK", "Monterrey", Type.CHEESE),
-                new Ingredient("SLSA", "Salsa", Type.SAUCE),
-                new Ingredient("SRCR", "Sour Cream", Type.SAUCE)
-        );
+        Iterable<Ingredient> result = ingredientRepository.findAll();
+        List<Ingredient> ingredients =
+                StreamSupport
+                        .stream(result.spliterator(), false)    // key：Iterable类型转换为List
+                        .collect(Collectors.toList());
+
         Type[] types = Type.values();
         for (Type type : types) {
             model.addAttribute(

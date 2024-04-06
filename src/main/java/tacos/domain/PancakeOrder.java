@@ -3,13 +3,16 @@ package tacos.domain;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
-import org.hibernate.validator.constraints.CreditCardNumber;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 public class PancakeOrder {
+    private static final long serialVersionUID = 1L;
+    private Long id;
+    private LocalDateTime placedAt;
     @NotBlank(message = "必填项")
     private String name;
     @NotBlank(message = "必填项")
@@ -23,7 +26,7 @@ public class PancakeOrder {
     @NotBlank(message = "必填项")
     private String postCode;
 
-    @CreditCardNumber(message = "卡号不合法")
+    //@CreditCardNumber(message = "卡号不合法")
     private String ccNumber;    // 信用卡
     @Pattern(regexp = "^(0[1-9]|1[0-2])(/)([2-9][0-9])$", message = "输入格式为 MM/YY")  // 日期格式校验
     private String ccExpiration;    // 信用卡过期时间
