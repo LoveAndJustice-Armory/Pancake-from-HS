@@ -3,14 +3,19 @@ package tacos.domain;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class PancakeOrder {
+@Table
+public class PancakeOrder implements Serializable {
     private static final long serialVersionUID = 1L;
+    @Id
     private Long id;
     private LocalDateTime placedAt;
     @NotBlank(message = "必填项")
