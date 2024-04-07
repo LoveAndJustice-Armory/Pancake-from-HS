@@ -10,5 +10,6 @@ public class WebConfig implements WebMvcConfigurer {    // 视图控制器：只
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {   // 注册视图控制器
         registry.addViewController("/").setViewName("home");    // 替代 HomeController
+        registry.addViewController("/login");   // 默认情况下，Spring Security会监听该路径的登录请求
     }
 }

@@ -1,5 +1,6 @@
 package tacos.domain;
 
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
@@ -17,6 +18,8 @@ public class PancakeOrder implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     private Long id;
+    @ManyToOne
+    private User user;
     private LocalDateTime placedAt;
     @NotBlank(message = "必填项")
     private String name;
